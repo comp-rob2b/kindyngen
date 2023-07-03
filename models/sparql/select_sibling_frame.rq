@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: MPL-2.0
+PREFIX kc: <https://comp-rob2b.github.io/metamodels/kinematic-chain/structural-entities#>
+
+SELECT ?sibling
+WHERE {
+    ?frame ^kc:between-attachments / kc:between-attachments ?sibling .
+    FILTER(?frame != ?sibling)
+}

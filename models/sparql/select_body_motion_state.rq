@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: MPL-2.0
+PREFIX geom-ent: <https://comp-rob2b.github.io/metamodels/geometry/structural-entities#>
+PREFIX geom-rel: <https://comp-rob2b.github.io/metamodels/geometry/spatial-relations#>
+PREFIX geom-coord: <https://comp-rob2b.github.io/metamodels/geometry/coordinates#>
+
+# Input:
+# - of_body: The target body for which to get the motion state
+# - with_respect_to_body: The reference body w.r.t. which the motion state is expressed
+
+SELECT ?angular_velocity ?linear_velocity ?velocity_twist
+       ?angular_acceleration ?linear_acceleration ?acceleration_twist
+WHERE {
+    # Just the individual OPTIONAL parts lead to order-dependent behaviour. Fix
+    # by "grounding" the query via those non-optional parts.
+    # [https://stackoverflow.com/questions/25131365/sparql-optional-query]
+    # [https://github.com/blazegraph/database/wiki/SPARQL_Order_Matters]
+    ?of_body a geom-ent:RigidBody .
+    ?with_respect_to_body a geom-ent:RigidBody .
+
+    OPTIONAL {
+        ?angular_velocity a geom-rel:AngularVelocity ;
+                          geom-rel:of ?of_body ;
+                          geom-rel:with-respect-to ?with_respect_to_body .
+    }
+    OPTIONAL {
+        ?linear_velocity a geom-rel:LinearVelocity ;
+                         geom-rel:of ?of_body ;
+                         geom-rel:with-respect-to ?with_respect_to_body .
+    }
+    OPTIONAL {
+        ?angular_acceleration a geom-rel:AngularAcceleration ;
+                              geom-rel:of ?of_body ;
+                              geom-rel:with-respect-to ?with_respect_to_body .
+    }
+    OPTIONAL {
+        ?linear_acceleration a geom-rel:LinearAcceleration ;
+                             geom-rel:of ?of_body ;
+                             geom-rel:with-respect-to ?with_respect_to_body .
+    }
+    OPTIONAL {
+        ?velocity_twist a geom-coord:VelocityTwistCoordinate ;
+                        geom-coord:of-velocity / geom-rel:of ?of_body ;
+                        geom-coord:of-velocity / geom-rel:with-respect-to ?with_respect_to_body .
+    }
+    OPTIONAL {
+        ?acceleration_twist a geom-coord:AccelerationTwistCoordinate ;
+                            geom-coord:of-acceleration / geom-rel:of ?of_body ;
+                            geom-coord:of-acceleration / geom-rel:with-respect-to ?with_respect_to_body .
+    }
+}

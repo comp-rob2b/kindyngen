@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: MPL-2.0
+PREFIX kc: <https://comp-rob2b.github.io/metamodels/kinematic-chain/structural-entities#>
+PREFIX kc-stat: <https://comp-rob2b.github.io/metamodels/kinematic-chain/state#>
+
+SELECT ?q ?qd ?qdd ?tau
+WHERE {
+    ?joint a kc:Joint ;
+           ^kc-stat:of-joint ?q, ?qd, ?qdd, ?tau .
+    ?q a kc-stat:JointPosition .
+    ?qd a kc-stat:JointVelocity .
+    ?qdd a kc-stat:JointAcceleration .
+    ?tau a kc-stat:JointForce .
+}

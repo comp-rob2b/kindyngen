@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: MPL-2.0
+PREFIX geom: <https://comp-rob2b.github.io/metamodels/geometry/structural-entities#>
+PREFIX geom-rel: <https://comp-rob2b.github.io/metamodels/geometry/spatial-relations#>
+PREFIX geom-coord: <https://comp-rob2b.github.io/metamodels/geometry/coordinates#>
+
+# Input:
+# - of_frame: The target frame for which to get the transformation
+# - with_respect_to_frame: The reference frame w.r.t. which the transformation is expressed
+
+SELECT ?rx ?tx ?tf
+WHERE {
+    ?of_frame a geom:Frame ;
+              geom:origin ?of_frame_origin .
+    ?of_frame_origin a geom:Point .
+    ?with_respect_to_frame a geom:Frame ;
+                           geom:origin ?with_respect_to_frame_origin .
+    ?with_respect_to_frame_origin a geom:Point .
+    OPTIONAL {
+        ?rx a geom-coord:OrientationCoordinate ;
+            geom-coord:of-orientation / geom-rel:of ?of_frame ;
+            geom-coord:of-orientation / geom-rel:with-respect-to ?with_respect_to_frame .
+    }
+    OPTIONAL {
+        ?tx a geom-coord:PositionCoordinate ;
+            geom-coord:of-position / geom-rel:of ?of_frame_origin ;
+            geom-coord:of-position / geom-rel:with-respect-to ?with_respect_to_frame_origin .
+    }
+    OPTIONAL {
+        ?tf a geom-coord:PoseCoordinate ;
+            geom-coord:of-pose / geom-rel:of ?of_frame ;
+            geom-coord:of-pose / geom-rel:with-respect-to ?with_respect_to_frame .
+    }
+}

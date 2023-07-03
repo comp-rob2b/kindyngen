@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: MPL-2.0
+PREFIX geom: <https://comp-rob2b.github.io/metamodels/geometry/structural-entities#>
+PREFIX kc: <https://comp-rob2b.github.io/metamodels/kinematic-chain/structural-entities#>
+
+SELECT ?child ?parent
+WHERE {
+    ?node a geom:Frame ;
+          ^geom:simplices ?link .
+    ?link a geom:RigidBody ;
+          geom:simplices ?frame .
+    ?frame a geom:Frame ;
+           ^kc:between-attachments ?joint .
+    ?joint a kc:Joint ;
+           kc:between-attachments ?child .
+    FILTER(?node != ?frame)
+    FILTER(?frame != ?child)
+    BIND(?node as ?parent)
+}

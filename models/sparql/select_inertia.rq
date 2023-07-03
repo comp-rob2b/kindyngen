@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: MPL-2.0
+PREFIX geom: <https://comp-rob2b.github.io/metamodels/geometry/structural-entities#>
+PREFIX geom-rel: <https://comp-rob2b.github.io/metamodels/geometry/spatial-relations#>
+PREFIX geom-coord: <https://comp-rob2b.github.io/metamodels/geometry/coordinates#>
+PREFIX rbdyn-ent: <https://comp-rob2b.github.io/metamodels/newtonian-rigid-body-dynamics/structural-entities#>
+PREFIX rbdyn-coord: <https://comp-rob2b.github.io/metamodels/newtonian-rigid-body-dynamics/coordinates#>
+
+# Input:
+# - frame: The frame determines the body under investigation as well as the
+#          reference for the centre of mass and rotational inertia.
+
+SELECT ?m_lin ?m_rot ?tx_com ?com ?rbi
+WHERE {
+    ?frame a geom:Frame ;
+           geom:origin ?org ;
+           ^geom:simplices ?body .
+    OPTIONAL {
+        ?m_lin a rbdyn-coord:MassCoordinate ;
+               rbdyn-coord:of-mass / rbdyn-ent:of ?body .
+        ?m_rot a rbdyn-coord:RotationalInertiaCoordinate ;
+               rbdyn-coord:of-inertia / rbdyn-ent:of ?body ;
+               rbdyn-coord:of-inertia / rbdyn-ent:about ?com .
+        ?tx_com a geom-coord:PositionCoordinate ;
+                geom-coord:of-position / geom-rel:of ?com ;
+                geom-coord:of-position / geom-rel:with-respect-to ?org .
+    }
+    OPTIONAL {
+        ?rbi a rbdyn-coord:RigidBodyInertiaCoordinate ;
+             rbdyn-coord:of-inertia / rbdyn-ent:about ?com .
+        ?tx_com a geom-coord:PositionCoordinate ;
+                geom-coord:of-position / geom-rel:of ?com ;
+                geom-coord:of-position / geom-rel:with-respect-to ?org .
+    }
+}

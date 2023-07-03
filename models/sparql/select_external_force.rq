@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: MPL-2.0
+PREFIX geom: <https://comp-rob2b.github.io/metamodels/geometry/structural-entities#>
+PREFIX rbdyn_ent: <https://comp-rob2b.github.io/metamodels/newtonian-rigid-body-dynamics/structural-entities#>
+PREFIX rbdyn_coord: <https://comp-rob2b.github.io/metamodels/newtonian-rigid-body-dynamics/coordinates#>
+PREFIX spec: <https://comp-rob2b.github.io/metamodels/kinematic-chain/solver-specification#>
+
+SELECT ?force
+WHERE {
+    ?node a geom:Frame ;
+          ^rbdyn_coord:as-seen-by ?force ;
+          ^geom:simplices ?body .
+    ?force a rbdyn_coord:WrenchCoordinate ;
+          rbdyn_coord:of-wrench / rbdyn_ent:acts-on ?body ;
+          ^spec:force / a spec:ExternalForce .
+}
