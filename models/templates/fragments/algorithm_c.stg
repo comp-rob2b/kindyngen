@@ -1,0 +1,53 @@
+// SPDX-License-Identifier: MPL-2.0
+
+//
+// Variable definitions and function calls
+//
+
+
+data-type ::= [
+    default: "double"
+]
+
+
+stmt(s) ::= <<
+<s>;
+>>
+
+
+
+define-variable(variable-id, variable) ::= <<
+<data-type.(variable.quantity)> <variable-id>[<variable-size(variable-id, variable)>]<({variable-<data-types.(variable-id).data-type>-init})(variable-id, variable)>
+>>
+
+variable-primitive-init(variable-id, variable) ::= <<
+<({<variable.quantity>-<data-types.(variable-id).data-type>-init})(variable, " = {", "}")>
+>>
+
+variable-array-init(variable-id, variable) ::= <<
+<{ = {}>
+    <data-types.(variable-id).contains:{c | <variable-init-index(c, variables.(c))>}; separator=",\n">
+}
+>>
+
+variable-init-index(variable-id, variable) ::= <<
+<({<variable.quantity>-primitive-init})(variable, array-init-prefix(variable-id, variable), "")>
+>>
+
+array-init-prefix(variable-id, variable) ::= <<
+[<({<variable.quantity>-index})(variable-id, variable)>]<{ = }>
+>>
+
+variable-size(variable-id, variable) ::= <<
+<({<variable.quantity>-<data-types.(variable-id).data-type>-size})(variable-id, variable)>
+>>
+
+quantity-size(variable-id, variable) ::= <<
+<({<variable.quantity>-primitive-size})(variable-id, variable)>
+>>
+
+
+
+schedule(closure-id, closures) ::= <<
+<({<closures.(closure-id).operator>})(closures.(closure-id))>
+>>

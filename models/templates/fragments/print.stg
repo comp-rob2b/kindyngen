@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: MPL-2.0
+
+print-include() ::= <<
+#include \<stdio.h\>
+>>
+
+print-variable(variable-id, variables) ::= <<
+printf("<variable-id>:\n");
+for (int i = 0; i \< <variable-size(variable-id, variables.(variable-id))>; i++) {
+    printf("%f, ", <variable-id>[i]);
+}
+printf("\n\n");
+>>

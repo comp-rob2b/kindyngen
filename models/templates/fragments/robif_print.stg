@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: MPL-2.0
+
+robif-print-include() ::= <<
+#include \<stdio.h\>
+#include \<math.h\>
+>>
+
+joint-position-to-solver(args) ::= <<
+<args.destination>[0] = 0.2
+>>
+
+joint-velocity-to-solver(args) ::= <<
+<args.destination>[0] = 0.0
+>>
+
+joint-force-from-solver(args) ::= <<
+<print-variable(args.source, variables)>
+>>

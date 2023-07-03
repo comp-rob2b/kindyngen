@@ -1,0 +1,5 @@
+// SPDX-License-Identifier: MPL-2.0
+
+ex-accumulate-joint-force(args) ::= <<
+<args.destination>[0] = <args.sources:{s | <s>[0]}; separator=" + ">
+>>

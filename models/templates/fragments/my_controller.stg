@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: MPL-2.0
+
+controller-include() ::= <<
+#include \<dyn2b/types/mechanics.h\>
+>>
+
+controller-definition() ::= <<
+void my_controller(
+        double max_velocity,
+        double max_force,
+        const double *restrict velocity,
+        double *restrict force)
+{
+    const double DAMPING = -max_force / max_velocity;
+
+    for (int i = 0; i \< 3; i++) {
+        force[DYN2B_WRENCH3_LIN_OFFSET + i] = 0.0;
+        force[DYN2B_WRENCH3_ANG_OFFSET + i] = 0.0;
+    }
+
+    double v = velocity[DYN2B_WRENCH3_ANG_OFFSET + DYN2B_Z_OFFSET];
+    force[DYN2B_WRENCH3_ANG_OFFSET + DYN2B_Z_OFFSET] = max_force + DAMPING * v;
+}
+>>
+
+ex-damping(args) ::= <<
+my_controller(<args.max-velocity>, <args.max-force>, <args.velocity-twist>, <args.wrench>)
+>>

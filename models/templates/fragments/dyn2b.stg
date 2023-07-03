@@ -1,0 +1,232 @@
+// SPDX-License-Identifier: MPL-2.0
+
+dyn2b-include() ::= <<
+#include \<dyn2b/types/vector3.h\>
+#include \<dyn2b/types/screw.h\>
+#include \<dyn2b/types/mechanics.h\>
+#include \<dyn2b/types/joint.h\>
+#include \<dyn2b/functions/array.h\>
+#include \<dyn2b/functions/vector3.h\>
+#include \<dyn2b/functions/matrix.h\>
+#include \<dyn2b/functions/screw.h\>
+#include \<dyn2b/functions/mechanics.h\>
+#include \<dyn2b/functions/joint.h\>
+>>
+
+
+//
+// Kinematics
+//
+
+compose-pose(args) ::= <<
+dyn2b_cmp_pose<args.dimensions>(<args.in1>, <args.in2>, <args.out>)
+>>
+
+add-velocity-twist(args) ::= <<
+dyn2b_add_arr(<screw-size(args.dimensions)>, 0, <args.in1>, <args.in2>, <args.out>)
+>>
+
+subtract-velocity-twist(args) ::= <<
+dyn2b_sub_arr(<screw-size(args.dimensions)>, <args.in1>, <args.in2>, <args.out>)
+>>
+
+append-velocity-twist(args) ::= <<
+memcpy(&<args.jacobian>[<screw-size(args.dimensions)> * <args.at-column>], <args.twist>, <screw-size(args.dimensions)> * <args.number-of-velocities> * sizeof(double))
+>>
+
+transform-velocity-twist-to-distal(args) ::= <<
+dyn2b_tf_dist_screw<args.dimensions>(<args.number-of-velocities>, <args.pose>, <args.from>, <args.to>)
+>>
+
+transform-acceleration-twist-to-distal(args) ::= <<
+dyn2b_tf_dist_acc<args.dimensions>(<args.pose>, <args.absolute-velocity>, <args.relative-velocity>, <args.from>, <args.to>)
+>>
+
+add-acceleration-twist(args) ::= <<
+dyn2b_add_arr(<screw-size(args.dimensions)>, 0, <args.in1>, <args.in2>, <args.out>)
+>>
+
+
+
+//
+// Mechanics
+//
+
+assign-wrench(args) ::= <<
+memcpy(<args.to>, <args.from>, <screw-size(args.dimensions)> * <args.number-of-wrenches> * sizeof(double))
+>>
+
+invert-wrench(args) ::= <<
+dyn2b_inv_arr(<screw-size(args.dimensions)> * <args.number-of-wrenches>, <args.original>, <args.inverse>)
+>>
+
+transform-wrench-to-proximal(args) ::= <<
+dyn2b_tf_prox_screw<args.dimensions>(<args.number-of-wrenches>, <args.pose>, <args.from>, &<args.to>[<screw-size(args.dimensions)> * <args.at-index>])
+>>
+
+acceleration-twist-to-wrench-with-rigid-body-inertia(args) ::= <<
+dyn2b_rbi_to_wrench<args.dimensions>(<args.rigid-body-inertia>, <args.acceleration-twist>, <args.wrench>)
+>>
+
+add-wrench(args) ::= <<
+dyn2b_add_arr(<screw-size(args.dimensions)> * <args.number-of-wrenches>, 0, <args.in1>, <args.in2>, <args.out>)
+>>
+
+accumulate-wrench(args) ::= <<
+dyn2b_add_arr_i(<screw-size(args.dimensions)> * <args.number-of-wrenches>, 0, <args.element>, <args.aggregate>)
+>>
+
+inertial-wrench(args) ::= <<
+dyn2b_nrt_wrench<args.dimensions>(<args.rigid-body-inertia>, <args.velocity-twist>, <args.wrench>)
+>>
+
+
+
+//
+// Kinematic chain
+//
+
+joint-position-to-pose(args) ::= <<
+dyn2b_<args.joint>_to_pose<args.dimensions>(<args.joint-position>, <args.pose>)
+>>
+
+joint-velocity-to-velocity-twist(args) ::= <<
+dyn2b_<args.joint>_to_twist<args.dimensions>(<args.joint-velocity>, <args.velocity-twist>)
+>>
+
+joint-acceleration-to-acceleration-twist(args) ::= <<
+dyn2b_<args.joint>_to_twist<args.dimensions>(<args.joint-acceleration>, <args.acceleration-twist>)
+>>
+
+joint-force-from-wrench(args) ::= <<
+dyn2b_<args.joint>_from_wrench<args.dimensions>(<args.number-of-wrenches>, <args.wrench>, <args.joint-force>)
+>>
+
+
+
+//
+// Size of various data structures
+//
+
+pose-primitive-size(variable-id, variable) ::= "<pose-size(variable.dimensions)>"
+pose-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements> * <pose-size(variable.dimensions)>"
+
+velocity-twist-primitive-size(variable-id, variable) ::= "<screw-size(variable.dimensions)> * <variable.number-of-velocities>"
+velocity-twist-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements> * <screw-size(variable.dimensions)>"
+
+acceleration-twist-primitive-size(variable-id, variable) ::= "<screw-size(variable.dimensions)> * <variable.number-of-accelerations>"
+acceleration-twist-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements> * <screw-size(variable.dimensions)>"
+
+wrench-primitive-size(variable-id, variable) ::= "<screw-size(variable.dimensions)> * <variable.number-of-wrenches>"
+wrench-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements> * <screw-size(variable.dimensions)>"
+
+rigid-body-inertia-primitive-size(variable-id, variable) ::= "<rbi-size(variable.dimensions)>"
+rigid-body-inertia-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements> * <rbi-size(variable.dimensions)>"
+
+joint-position-primitive-size(variable-id, variable) ::= "<variable.size>"
+joint-position-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements>"
+
+joint-velocity-primitive-size(variable-id, variable) ::= "<variable.size>"
+joint-velocity-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements>"
+
+joint-acceleration-primitive-size(variable-id, variable) ::= "<variable.size>"
+joint-acceleration-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements>"
+
+joint-force-primitive-size(variable-id, variable) ::= "<variable.size>"
+joint-force-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements>"
+
+joint-inertia-primitive-size(variable-id, variable) ::= "<variable.size>"
+joint-inertia-array-size(variable-id, variable) ::= "<data-types.(variable-id).number-of-elements>"
+
+
+
+pose-size(dim) ::= <<
+DYN2B_POSE<dim>_SIZE
+>>
+
+screw-size(dim) ::= <<
+DYN2B_SCREW<dim>_SIZE
+>>
+
+rbi-size(dim) ::= <<
+DYN2B_RBI<dim>_SIZE
+>>
+
+
+
+//
+// Initialization of data structures
+//
+
+screw-init(moment, direction, prefix="", postfix="") ::= <<
+<if (moment && direction)><prefix>
+    <moment, direction:{m, d | <vec(m)>, <vec(d)>}; separator=",\n">
+<postfix><endif>
+>>
+
+
+pose-primitive-init(variable, prefix="", postfix="") ::= <<
+<if (variable.direction-cosine-x && variable.direction-cosine-y && variable.direction-cosine-z && variable.position)><prefix>
+    <mat(variable.direction-cosine-x, variable.direction-cosine-y, variable.direction-cosine-z); separator=",\n">,
+    <vec(variable.position)>
+<postfix><endif>
+>>
+
+velocity-twist-primitive-init(variable, prefix="", postfix="") ::= <<
+<screw-init(variable.angular-velocity, variable.linear-velocity, prefix, postfix)>
+>>
+
+acceleration-twist-primitive-init(variable, prefix="", postfix="") ::= <<
+<screw-init(variable.angular-acceleration, variable.linear-acceleration, prefix, postfix)>
+>>
+
+wrench-primitive-init(variable, prefix="", postfix="") ::= <<
+<screw-init(variable.force, variable.torque, prefix, postfix)>
+>>
+
+rigid-body-inertia-primitive-init(variable, prefix="", postfix="") ::= <<
+<if (variable.rotational-inertia && variable.moment-of-mass && variable.mass)><prefix>
+    <variable.rotational-inertia; separator=", ">,
+    <variable.moment-of-mass; separator=", ">,
+    <variable.mass>
+<postfix><endif>
+>>
+
+joint-position-primitive-init(variable, prefix="", postfix="") ::= <<
+<joint-coordinate-primitive-init(variable, prefix, postfix)>
+>>
+
+joint-velocity-primitive-init(variable, prefix="", postfix="") ::= <<
+<joint-coordinate-primitive-init(variable, prefix, postfix)>
+>>
+
+joint-acceleration-primitive-init(variable, prefix="", postfix="") ::= <<
+<joint-coordinate-primitive-init(variable, prefix, postfix)>
+>>
+
+joint-force-primitive-init(variable, prefix="", postfix="") ::= <<
+<joint-coordinate-primitive-init(variable, prefix, postfix)>
+>>
+
+joint-inertia-primitive-init(variable, prefix="", postfix="") ::= <<
+<joint-coordinate-primitive-init(variable, prefix, postfix)>
+>>
+
+joint-coordinate-primitive-init(variable, prefix="", postfix="") ::= <<
+<if (variable.coordinates)><prefix><variable.coordinates; separator=", "><postfix><endif>
+>>
+
+
+mat-transpose(c1, c2, c3) ::= <<
+<c1,c2,c3:{a, b, c | <a>, <b>, <c>}; separator=",\n">
+>>
+
+mat(c1, c2, c3) ::= <<
+<vec(c1)>,
+<vec(c2)>,
+<vec(c3)>
+>>
+
+vec(v) ::= <<
+<v; separator=", ">
+>>

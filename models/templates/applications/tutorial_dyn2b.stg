@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: MPL-2.0
+
+import "../models/templates/fragments/algorithm_c.stg"
+import "../models/templates/fragments/dyn2b.stg"
+
+
+application(data-types, variables, input, output, local, closures, schedule) ::= <<
+<dyn2b-include()>
+
+int main()
+{
+    <local:{id | <define-variable(id, variables.(id))>}:stmt(); separator="\n">
+
+    <schedule:schedule(closures):stmt(); separator="\n">
+
+    return 0;
+}
+>>
