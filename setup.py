@@ -10,6 +10,6 @@ setup(name='kindynsyn',
       author_email='sven.schneider@h-brs.de',
       license='MPL-2.0',
       install_requires=['rdflib', 'pyshacl', 'numpy'],
-      packages=['kindynsyn'],
+      packages=['kindynsyn', 'kindynsyn_tutorial'],
       package_data={'kindynsyn': ['models/sparql/*.rq']}
      )
