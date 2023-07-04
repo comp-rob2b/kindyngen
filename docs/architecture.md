@@ -10,7 +10,7 @@ The core of `kindynsyn` is a graph traversal which can be controlled by extensio
 
 ## Code generator
 
-A template-based code generator backend consumes `kindynsyn`'s IR. In `kindyngen` we opt for [StringTemplate](https://www.stringtemplate.org/) as the template engine and the [StringTemplate Standalone Tool](https://github.com/jsnyders/STSTv4) as its frontend. Its author has reported on StringTemplate's benefits [^Parr2004] over the more popular template engines such as [Cheetha](https://cheetahtemplate.org/), [Django's](https://www.djangoproject.com/) templating system, [Genshi](https://genshi.edgewall.org/) or [Jinja](https://palletsprojects.com/p/jinja/). A more hands-on paper draft is also available [^Parr2006].
+A template-based code generator backend consumes `kindynsyn`'s IR. In `kindyngen` we opt for [StringTemplate](https://www.stringtemplate.org/) as the template engine and the [StringTemplate Standalone Tool](https://github.com/jsnyders/STSTv4) as its frontend. Its author has reported on StringTemplate's benefits[^Parr2004] over the more popular template engines such as [Cheetha](https://cheetahtemplate.org/), [Django's](https://www.djangoproject.com/) templating system, [Genshi](https://genshi.edgewall.org/) or [Jinja](https://palletsprojects.com/p/jinja/). A more hands-on paper draft is also available[^Parr2006].
 
 To summarize, the main reasons for choosing StringTemplate are:
 

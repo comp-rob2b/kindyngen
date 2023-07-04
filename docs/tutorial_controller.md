@@ -1,6 +1,6 @@
 # Cartesian control
 
-Most users of a robot want to describe tasks in Cartesian space. Hence, in this tutorial we will implement a simple, linear impedance controller [^impedance-contoller] to regulate the artificial force to be exerted on the robot's end-effector. Here, we connect this controller to the robot's end-effector via the RNE's external force interface. The objective is to apply a torque on the end-effector so that it should rotate when not constrained.
+Most users of a robot want to describe tasks in Cartesian space. Hence, in this tutorial we will implement a simple, linear impedance controller[^impedance-contoller] to regulate the artificial force to be exerted on the robot's end-effector. Here, we connect this controller to the robot's end-effector via the RNE's external force interface. The objective is to apply a torque on the end-effector so that it should rotate when not constrained.
 
 [^impedance-contoller]: An impedance controller maps from the motion domain to the force domain. The impedance relations are known as _stiffness_ (position to force), _damping_ (velocity to force) and _inertia_ (acceleration to force).
 
@@ -58,7 +58,7 @@ class MyCartesianControllerState:
     wrench: URIRef | None = field(default=None)
 ```
 
-We connect controller's output ($f_{cmd}$) to the external force exerted on the end-effector. To this end, during the configuration, we first declare the wrench data. Then we tag it as an external force specification, so that the RNE's external force propagation can find it:
+We connect the controller's output ($f_{cmd}$) to the external force exerted on the end-effector. To this end, during the configuration, we first declare the wrench data. Then we tag it as an external force specification, so that the RNE's external force propagation can find it:
 ```python
 def configure_edge(self, state, parent, child):
     par = state[parent][ChainIndexState]

@@ -23,7 +23,7 @@ source ./.venv/bin/activate
 ```
 
 Now, install the synthesizer via pip (the `-e` flag indicates an editable installation to avoid repeated installation steps after changes to the code). This will also install the required dependencies:
-```
+```bash
 pip3 install -e .
 ```
 
@@ -41,6 +41,7 @@ The following dependencies are required for the code generator:
 * [Apache Ant](https://ant.apache.org/)
 * [StringTemplate](https://www.stringtemplate.org/)
 * [STSTv4](https://github.com/jsnyders/STSTv4) (from Git!)
+* [GNU Make](https://www.gnu.org/software/make/)
 
 For convenience, we provide a step-by-step installation guide for the latter two dependencies. Note, that STSTv4 comes with a pre-bundled version of StringTemplate. Hence, the steps for StringTemplate can be considered optional and are only relevant if one plans to use a more recent StringTemplate version.
 
