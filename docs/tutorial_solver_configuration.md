@@ -8,9 +8,7 @@ In the [previous section](getting_started.md) we have shown the common parts of 
 * `Pose(of=link2-root, wrt=link1-joint)`: this pose is the joint's active contribution and must be computed at runtime given the current joint position as well as the joint model. In other words, it represents the solution to the joint's forward position kinematics. This forward position kinematics operator is the first function emitted by the `PositionPropagationStep`.
 * `Pose(of=link2-root, wrt=link1-root)`: this pose is the composition of the previous two poses. Hence, the associated composition operator is the second function emitted by the `PositionPropagationStep`.
 
-| ![PositionPropagationStep](fig/spatial_relations.svg) |
-|:-----------------------------------------------------:|
-| Figure 3: Pose relations associated with two segments |
+![Pose relations associated with two segments](fig/spatial_relations.svg)
 
 The `PositionAccumulationStep` emits one more composition operator to compute the current segment's pose with respect to the robot's base. For example, related to the figure above and assuming that the robot's base is chosen as the frame `link0-root`, the step would ...
 

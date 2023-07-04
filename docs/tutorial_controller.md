@@ -18,9 +18,7 @@ The resulting behaviour is best understood by first considering the two "extreme
 
 The following figure depicts this behaviour.
 
-| ![Impedance controller](fig/impedance_controller.svg) |
-|:-----------------------------------------------------:|
-|            Figure 5: Impedance controller             |
+![Impedance controller](fig/impedance_controller.svg)
 
 
 ## Traverser: mounting the controller in the graph

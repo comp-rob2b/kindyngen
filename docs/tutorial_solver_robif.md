@@ -70,10 +70,7 @@ SELECT ?child ?parent WHERE {
 
 First, the query defines two namespaces to allow for shorter notation (the `PREFIX` lines) and then starts the query definition via the `SELECT ... WHERE` statement that declares two return arguments named `?child` and `?parent`. We explain how the core query works along the following figure. The query is applied to a `?node` whose ID `kyndynsyn` passes to the query (in the example figure this would be the frame `l1-fr1`). Then the query follows any edge `geom-ent:simplices` in the opposite direction (indicated by the caret character `^`) to end up at a simplicial complex -- the most simple version of a rigid body or link -- which would be `l1` in the figure. From there it follows the `geom-ent:simplices` edge to end up at `l1-fr1`, `l1-fr2` _and_ `l1-fr3`. The first `FILTER` statement removes the start node from this set, so that the next line tries to follow any sequence of `kc-ent:between-attachments`, first in the inverse direction then in the forward direction, from the nodes `l1-fr2` and `l1-fr3`. This query is only applicable to `l1-fr3` but leads to the nodes `l1-fr3` and `l2-fr1`. Hence, the second `FILTER` statement removes the previously-visited node `l1-fr3` from the set so that only `l2-fr1` remains as the `?child`. Finally, the query assigns (`BIND`) the `?node` parameter to the `?parent` parameter which is an expected output.
 
-| ![Expansion query](fig/query_expand.svg) |
-|:----------------------------------------:|
-|         Figure 4: Expansion query        |
-
+![Expansion query](fig/query_expand.svg)
 
 Whenever this expansion query produces any non-empty output, i.e. it finds a node to expand to, `kindynsyn` will trigger the dispatchers as defined in the associated `Traverser`.
 
@@ -182,7 +179,7 @@ The second code generator (cf. [`robif2b.stg`](https://github.com/comp-rob2b/kin
 robif2b-variables() ::= <<
 double eff_cmd[] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 ...
-struct robif2b_kinova_gen3_nbx rob = { 
+struct robif2b_kinova_gen3_nbx rob = {
     ...
     .jnt_trq_msr = eff_msr,
     ...
