@@ -11,7 +11,7 @@ The following dependencies are required and can either be installed with the ope
 
 First, clone the repository and change into the cloned folder:
 ```bash
-git clone https://github.com/comp-rob2b/kindynsyn.git
+git clone https://github.com/comp-rob2b/kindyngen.git
 cd kindynsyn
 ```
 
