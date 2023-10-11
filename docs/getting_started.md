@@ -147,7 +147,7 @@ make <backend>
 
 Where `<backend>` selects the desired generation target and must be compatible with the previous selection of the `<tutorial>`:
 
-* `dyn2b`: for `fpk` or `rne`
+* `tutorial-dyn2b`: for `fpk` or `rne`
 * `tutorial-dyn2b-slv-print`: for `rne_slv_robif`
 * `tutorial-dyn2b-slv-robif2b`: for `rne_slv_robif`
 * `tutorial-dyn2b-slv-print-ctrl`: for `rne_slv_robif_ctrl`
