@@ -1,0 +1,29 @@
+ex-logger-include() ::= <<
+#include \<stdio.h\>
+>>
+
+ex-logger-init() ::= <<
+FILE *log = fopen("log.csv", "w");
+>>
+
+ex-logger(args) ::= <<
+<({ex-logger-<variables.(args.quantity).quantity>})(args, variables.(args.quantity))>
+>>
+
+ex-logger-pose(args, var) ::= <<
+<ex-logger-printer(args, var, {DYN2B_POSE<var.dimensions>_SIZE - 1}, "pose")>
+>>
+
+ex-logger-velocity-twist(args, var) ::= <<
+<ex-logger-printer(args, var, {DYN2B_SCREW<var.dimensions>_SIZE - 1}, "velocity-twist")>
+>>
+
+
+
+ex-logger-printer(args, var, size, type) ::= <<
+fprintf(log, "<var.represents>,<type>,");
+for (int i = 0; i \< <size>; i++) {
+    fprintf(log, "%f,", <args.quantity>[i]);
+}
+fprintf(log, "%f\n", <args.quantity>[<size>]);
+>>
