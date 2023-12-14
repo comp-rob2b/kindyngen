@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: MPL-2.0
+
+import "../models/templates/fragments/algorithm_c.stg"
+import "../models/templates/fragments/dyn2b.stg"
+import "../models/templates/fragments/my_solver.stg"
+import "../models/templates/fragments/robif_print.stg"
+import "../models/templates/fragments/print.stg"
+import "../models/templates/fragments/my_controller.stg"
+import "../models/templates/fragments/my_logger.stg"
+
+
+application(data-types, variables, input, output, local, closures, schedule) ::= <<
+<dyn2b-include()>
+<robif-print-include()>
+<print-include()>
+<ex-logger-include()>
+
+<controller-definition()>
+
+int main()
+{
+    <local:{id | <define-variable(id, variables.(id))>}:stmt(); separator="\n">
+
+    <ex-logger-init():stmt()>
+    <schedule:schedule(closures):stmt(); separator="\n">
+    <ex-logger-finalize():stmt()>
+
+    return 0;
+}
+>>

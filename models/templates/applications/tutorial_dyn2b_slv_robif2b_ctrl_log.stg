@@ -1,0 +1,38 @@
+// SPDX-License-Identifier: MPL-2.0
+
+import "../models/templates/fragments/algorithm_c.stg"
+import "../models/templates/fragments/dyn2b.stg"
+import "../models/templates/fragments/my_solver.stg"
+import "../models/templates/fragments/robif2b.stg"
+import "../models/templates/fragments/my_controller.stg"
+import "../models/templates/fragments/my_logger.stg"
+
+
+application(data-types, variables, input, output, local, closures, schedule) ::= <<
+<dyn2b-include()>
+<robif2b-include()>
+<controller-include()>
+<ex-logger-include()>
+#include \<unistd.h\>
+
+<controller-definition()>
+
+int main()
+{
+    <robif2b-variables()>
+    <ex-logger-init()>
+    <local:{id | <define-variable(id, variables.(id))>}:stmt(); separator="\n">
+
+    <robif2b-setup()>
+    while (true) {
+        <robif2b-update()>
+        <schedule:schedule(closures):stmt(); separator="\n">
+
+        usleep(1000);
+    }
+
+<robif2b-shutdown()>
+
+    return 0;
+}
+>>
