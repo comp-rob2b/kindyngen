@@ -19,15 +19,24 @@ try:
     funcs = ["solver_configurator", "translator_configurator"]
     _mod = importlib.__import__(name=sys.argv[1], fromlist=funcs)
     solver_configurator = _mod.solver_configurator
-    translator_configurator = _mod.translator_configurator
+    translator_configurators = [_mod.translator_configurator]
+
+    postprocessors = []
+    for i in range(len(sys.argv) - 2):
+        funcs = ["postprocessor", "translator_configurator"]
+        _mod = importlib.__import__(name=sys.argv[i + 2], fromlist=funcs)
+        postprocessors.append(_mod.postprocessor)
+        translator_configurators.append(_mod.translator_configurator)
 except:
     print("Usage:")
-    print("#", sys.argv[0], "<tutorial>")
+    print("#", sys.argv[0], "<tutorial> [<postprocessor>]")
     print("where <tutorial> is one of:")
     print("- fpk")
     print("- rne")
     print("- rne_slv_robif")
     print("- rne_slv_robif_ctrl")
+    print("where <postprocessor> is one of:")
+    print("- log")
     sys.exit()
 
 
@@ -85,10 +94,18 @@ def main():
 
 
     #
+    # Postprocess
+    #
+    for postprocess in postprocessors:
+        postprocess(g)
+
+
+    #
     # Generate intermediate representation
     #
-    tr = translator_configurator()
-    tr.extend(translator_list)
+    tr = translator_list
+    for translator in translator_configurators:
+        tr.extend(translator())
     ir = IRGenerator(g, tr)
     ir_prog = ir.generate(sched, algo_id)
 
