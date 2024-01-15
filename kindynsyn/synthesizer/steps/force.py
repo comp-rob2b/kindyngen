@@ -279,7 +279,6 @@ class QuasiStaticExternalForcePropagationStep:
         self.algo["func"].extend([cpy])
 
     def compute_branch(self, state, parent, children):
-        acc = state[parent][AccelerationPropagationState]
         nrt = state[parent][InertialForceState]
         prp = state[parent][QuasiStaticExternalForcePropagationState]
 
