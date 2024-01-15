@@ -256,16 +256,14 @@ class QuasiStaticExternalForcePropagationStep:
 
         # Setup the state for the parent
         f_cur_prox = self.dyn.wrench(acts_on=par.bdy, as_seen_by=par.frm_prox, number_of_wrenches=size_acc)
-        f_ext = self.dyn.wrench(acts_on=par.bdy, as_seen_by=par.frm_prox, number_of_wrenches=size_acc)
 
         s = QuasiStaticExternalForcePropagationState()
         s.f_cur_prox = f_cur_prox
-        s.f_ext = f_ext
         s.size = size
         s.size_acc = size_acc
         state[parent][QuasiStaticExternalForcePropagationState] = s
 
-        self.algo["data"].extend([s.f_cur_prox, s.f_ext])
+        self.algo["data"].extend([s.f_cur_prox])
 
     def compute_leaf(self, state, node):
         try:
@@ -286,14 +284,6 @@ class QuasiStaticExternalForcePropagationStep:
         acc = state[parent][AccelerationPropagationState]
         nrt = state[parent][InertialForceState]
         prp = state[parent][QuasiStaticExternalForcePropagationState]
-
-        # -F_ext
-        inv = self.dyn_coord.invert_wrench(
-            original=prp.f_ext,
-            inverse=prp.f_cur_prox,
-            number_of_wrenches=prp.size)
-
-        self.algo["func"].extend([inv])
 
         for child in children:
             idx = state[child][ChainIndexState]
