@@ -18,8 +18,8 @@ void my_controller(
         force[DYN2B_WRENCH3_ANG_OFFSET + i] = 0.0;
     }
 
-    double v = velocity[DYN2B_WRENCH3_ANG_OFFSET + DYN2B_Z_OFFSET];
-    force[DYN2B_WRENCH3_ANG_OFFSET + DYN2B_Z_OFFSET] = max_force + DAMPING * v;
+    double v = velocity[DYN2B_TWIST3_LIN_OFFSET + DYN2B_Z_OFFSET];
+    force[DYN2B_WRENCH3_LIN_OFFSET + DYN2B_Z_OFFSET] = max_force + DAMPING * v;
 }
 >>
 
