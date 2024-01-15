@@ -272,13 +272,11 @@ class QuasiStaticExternalForcePropagationStep:
             # There was no external force specified for this link
             return
 
-        # -F_ext
-        inv = self.dyn_coord.invert_wrench(
-            original=prp.f_ext,
-            inverse=prp.f_cur_prox,
-            number_of_wrenches=prp.size)
+        cpy = self.dyn_coord.assign_wrench(
+            frm=prp.f_ext,
+            to=prp.f_cur_prox)
 
-        self.algo["func"].extend([inv])
+        self.algo["func"].extend([cpy])
 
     def compute_branch(self, state, parent, children):
         acc = state[parent][AccelerationPropagationState]
