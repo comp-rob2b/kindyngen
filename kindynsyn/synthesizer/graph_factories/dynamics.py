@@ -137,6 +137,28 @@ class DynamicsEntitiesCoordinates:
         self.g.add((id_, RBDYN_OP["at-index"], Literal(at_index)))
         return id_
 
+    def rotate_wrench_to_distal_with_pose(self, pose, frm, to, number_of_wrenches, at_index):
+        assert self.g.value(pose, GEOM_COORD["of-pose"] / GEOM_REL["of"]) == self.g.value(to, RBDYN_COORD["as-seen-by"])
+        assert self.g.value(pose, GEOM_COORD["of-pose"] / GEOM_REL["with-respect-to"]) == self.g.value(frm, RBDYN_COORD["as-seen-by"])
+        assert number_of_wrenches <= self.g.value(frm, RBDYN_COORD["number-of-wrenches"])
+        assert number_of_wrenches <= self.g.value(to, RBDYN_COORD["number-of-wrenches"])
+        assert number_of_wrenches + at_index <= self.g.value(to, RBDYN_COORD["number-of-wrenches"])
+        assert QUDT_UNIT["UNITLESS"] in self.g[pose : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["M"] in self.g[pose : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["N-M"] in self.g[frm : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["N"] in self.g[frm : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["N-M"] in self.g[to : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["N"] in self.g[to : QUDT_SCHEMA["unit"]]
+
+        id_ = uuid_ref()
+        self.g.add((id_, RDF["type"], RBDYN_OP["RotateWrenchToDistalWithPose"]))
+        self.g.add((id_, RBDYN_OP["pose"], pose))
+        self.g.add((id_, RBDYN_OP["from"], frm))
+        self.g.add((id_, RBDYN_OP["to"], to))
+        self.g.add((id_, RBDYN_OP["number-of-wrenches"], Literal(number_of_wrenches)))
+        self.g.add((id_, RBDYN_OP["at-index"], Literal(at_index)))
+        return id_
+
     def accumulate_wrench(self, aggregate, new_element, number_of_wrenches):
         assert self.g.value(aggregate, RBDYN_COORD["as-seen-by"]) == self.g.value(new_element, RBDYN_COORD["as-seen-by"])
         assert self.g.value(aggregate, RBDYN_COORD["of-wrench"] / RBDYN_ENT["reference-point"]) == self.g.value(new_element, RBDYN_COORD["of-wrench"] / RBDYN_ENT["reference-point"])

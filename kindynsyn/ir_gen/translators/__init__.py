@@ -37,6 +37,7 @@ translator_list = [
     AddAccelerationTwistTranslator(),
     InvertWrenchTranslator(),
     TransformWrenchToProximalTranslator(),
+    RotateWrenchToDistalWithPoseTranslator(),
     InertialWrenchTranslator(),
     AccelerationTwistToWrenchWithRigidBodyInertiaTranslator(),
     AssignWrenchTranslator(),

@@ -81,6 +81,21 @@ class TransformWrenchToProximalTranslator:
             "to": escape(qname(g, g.value(node, RBDYN_OP["to"])))
         }
 
+@for_type(RBDYN_OP["RotateWrenchToDistalWithPose"])
+class RotateWrenchToDistalWithPoseTranslator:
+    @staticmethod
+    def translate(g, node):
+        return {
+            "represents": str(node),
+            "operator": "rotate-wrench-to-distal-with-pose",
+            "dimensions": 3,
+            "number-of-wrenches": int(g.value(node, RBDYN_OP["number-of-wrenches"])),
+            "at-index": int(g.value(node, RBDYN_OP["at-index"])),
+            "pose": escape(qname(g, g.value(node, RBDYN_OP["pose"]))),
+            "from": escape(qname(g, g.value(node, RBDYN_OP["from"]))),
+            "to": escape(qname(g, g.value(node, RBDYN_OP["to"])))
+        }
+
 @for_type(RBDYN_OP["InertialWrench"])
 class InertialWrenchTranslator:
     @staticmethod

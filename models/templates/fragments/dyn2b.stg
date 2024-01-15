@@ -68,6 +68,10 @@ transform-wrench-to-proximal(args) ::= <<
 dyn2b_tf_prox_screw<args.dimensions>(<args.number-of-wrenches>, <args.pose>, <args.from>, &<args.to>[<screw-size(args.dimensions)> * <args.at-index>])
 >>
 
+rotate-wrench-to-distal-with-pose(args) ::= <<
+dyn2b_rot_dist_screw<args.dimensions>(<args.number-of-wrenches>, <args.pose>, <args.from>, &<args.to>[<screw-size(args.dimensions)> * <args.at-index>])
+>>
+
 acceleration-twist-to-wrench-with-rigid-body-inertia(args) ::= <<
 dyn2b_rbi_to_wrench<args.dimensions>(<args.rigid-body-inertia>, <args.acceleration-twist>, <args.wrench>)
 >>

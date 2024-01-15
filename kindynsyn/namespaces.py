@@ -155,6 +155,7 @@ class RBDYN_OP(DefinedNamespace):
     AccumulateWrench: URIRef            # _Accumulate_ wrench
     InertialWrench: URIRef
     TransformWrenchToProximal: URIRef
+    RotateWrenchToDistalWithPose: URIRef
 
     original: URIRef                    # The _original_ wrench to be inverted
     inverse: URIRef                     # The _inverse_ of the original wrench
