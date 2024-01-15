@@ -6,9 +6,8 @@ PREFIX spec: <https://comp-rob2b.github.io/metamodels/kinematic-chain/solver-spe
 
 SELECT ?force
 WHERE {
-    ?node a geom:Frame ;
-          ^rbdyn_coord:as-seen-by ?force ;
-          ^geom:simplices ?body .
+    ?frame a geom:Frame ;
+          ^rbdyn_coord:as-seen-by ?force .
     ?force a rbdyn_coord:WrenchCoordinate ;
           rbdyn_coord:of-wrench / rbdyn_ent:acts-on ?body ;
           ^spec:force / a spec:ExternalForce .

@@ -200,7 +200,7 @@ class QuasiStaticExternalForcePropagationStep:
         idx = state[node][ChainIndexState]
 
         # TODO: Handle specification in root frame
-        res = self.g.query(self.sel_ext, initBindings={"frame": idx.frm_prox})
+        res = self.g.query(self.sel_ext, initBindings={"frame": idx.frm_prox, "body": idx.bdy})
         if not res:
             # There was no external force specified for this link
             return
