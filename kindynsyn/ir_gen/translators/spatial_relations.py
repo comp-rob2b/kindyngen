@@ -104,6 +104,20 @@ class TransformVelocityTwistToDistalTranslator:
             "to": escape(qname(g, g.value(node, GEOM_OP["to"])))
         }
 
+@for_type(GEOM_OP["RotateVelocityTwistToProximalWithPose"])
+class RotateVelocityTwistToProximalWithPoseTranslator:
+    @staticmethod
+    def translate(g, node):
+        return {
+            "represents": str(node),
+            "operator": "rotate-velocity-twist-to-proximal-with-pose",
+            "dimensions": 3,
+            "number-of-velocities": 1,
+            "pose": escape(qname(g, g.value(node, GEOM_OP["pose"]))),
+            "from": escape(qname(g, g.value(node, GEOM_OP["from"]))),
+            "to": escape(qname(g, g.value(node, GEOM_OP["to"])))
+        }
+
 @for_type(GEOM_OP["TransformAccelerationTwistToDistal"])
 class TransformAccelerationTwistToDistalTranslator:
     @staticmethod

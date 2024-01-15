@@ -167,6 +167,23 @@ class SpatialRelationsCoordinates:
         self.g.add((id_, GEOM_OP["to"], to))
         return id_
 
+    def rotate_velocity_twist_to_proximal_with_pose(self, pose, frm, to):
+        assert self.g.value(pose, GEOM_COORD["of-pose"] / GEOM_REL["with-respect-to"]) == self.g.value(to, GEOM_COORD["as-seen-by"])
+        assert self.g.value(pose, GEOM_COORD["of-pose"] / GEOM_REL["of"]) == self.g.value(frm, GEOM_COORD["as-seen-by"])
+        assert QUDT_UNIT["UNITLESS"] in self.g[pose : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["M"] in self.g[pose : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["RAD-PER-SEC"] in self.g[frm : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["M-PER-SEC"] in self.g[frm : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["RAD-PER-SEC"] in self.g[to : QUDT_SCHEMA["unit"]]
+        assert QUDT_UNIT["M-PER-SEC"] in self.g[to : QUDT_SCHEMA["unit"]]
+
+        id_ = uuid_ref()
+        self.g.add((id_, RDF["type"], GEOM_OP["RotateVelocityTwistToProximalWithPose"]))
+        self.g.add((id_, GEOM_OP["pose"], pose))
+        self.g.add((id_, GEOM_OP["from"], frm))
+        self.g.add((id_, GEOM_OP["to"], to))
+        return id_
+
     def transform_acceleration_twist_to_distal(self, pose, absolute_velocity, relative_velocity, frm, to):
         id_ = uuid_ref()
         self.g.add((id_, RDF["type"], GEOM_OP["TransformAccelerationTwistToDistal"]))

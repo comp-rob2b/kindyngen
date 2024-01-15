@@ -30,6 +30,7 @@ translator_list = [
     JointAccelerationToAccelerationTwistTranslator(),
     JointForceFromWrenchTranslator(),
     TransformVelocityTwistToDistalTranslator(),
+    RotateVelocityTwistToProximalWithPoseTranslator(),
     TransformAccelerationTwistToDistalTranslator(),
     ComposePoseTranslator(),
     AddVelocityTwistTranslator(),

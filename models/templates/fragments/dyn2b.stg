@@ -38,6 +38,10 @@ transform-velocity-twist-to-distal(args) ::= <<
 dyn2b_tf_dist_screw<args.dimensions>(<args.number-of-velocities>, <args.pose>, <args.from>, <args.to>)
 >>
 
+rotate-velocity-twist-to-proximal-with-pose(args) ::= <<
+dyn2b_rot_prox_screw<args.dimensions>(<args.number-of-velocities>, <args.pose>, <args.from>, <args.to>)
+>>
+
 transform-acceleration-twist-to-distal(args) ::= <<
 dyn2b_tf_dist_acc<args.dimensions>(<args.pose>, <args.absolute-velocity>, <args.relative-velocity>, <args.from>, <args.to>)
 >>

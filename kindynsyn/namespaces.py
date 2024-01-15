@@ -84,6 +84,7 @@ class GEOM_OP(DefinedNamespace):
     AddAccelerationTwist: URIRef
     ComposePose: URIRef
     TransformVelocityTwistToDistal: URIRef
+    RotateVelocityTwistToProximalWithPose: URIRef
     TransformAccelerationTwistToDistal: URIRef
 
     in1: URIRef
