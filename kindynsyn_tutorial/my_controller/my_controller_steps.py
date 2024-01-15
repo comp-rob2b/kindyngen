@@ -4,7 +4,7 @@ from rdflib import URIRef, Literal, RDF
 from kindynsyn.rdflib_tools import uuid_ref
 from kindynsyn.synthesizer import Traverser, Dispatcher
 from kindynsyn.synthesizer.steps import ChainIndexState, \
-    VelocityPropagationState
+    PositionAccumulationState, VelocityPropagationState
 from kindynsyn.namespaces import SPEC
 from .namespace import EX_CTRL
 
@@ -21,15 +21,20 @@ SELECT ?child ?parent WHERE {
 
 @dataclass
 class MyCartesianControllerState:
+    velocity_root: URIRef | None = field(default=None)
+    wrench_root: URIRef | None = field(default=None)
     wrench: URIRef | None = field(default=None)
 
 
 class MyCartesianControllerStep:
 
-    def __init__(self, g, algo, dyn):
+    def __init__(self, g, algo, geom, geom_coord, dyn, dyn_coord):
         self.g = g
         self.algo = algo
+        self.geom = geom
+        self.geom_coord = geom_coord
         self.dyn = dyn
+        self.dyn_coord = dyn_coord
 
     def traverse(self):
         return Traverser(
@@ -41,6 +46,10 @@ class MyCartesianControllerStep:
         par = state[parent][ChainIndexState]
 
         # Declare required data
+        velocity_root = self.geom.velocity_twist(of=par.bdy,
+            with_respect_to=par.bdy_root, as_seen_by=par.frm_root)
+        wrench_root = self.dyn.wrench(acts_on=par.bdy, as_seen_by=par.frm_root,
+            number_of_wrenches=1)
         wrench = self.dyn.wrench(acts_on=par.bdy, as_seen_by=par.frm_prox,
             number_of_wrenches=1)
 
@@ -51,23 +60,36 @@ class MyCartesianControllerStep:
 
         # Setup state
         s = MyCartesianControllerState()
+        s.velocity_root = velocity_root
+        s.wrench_root = wrench_root
         s.wrench = wrench
 
         # Register state
         state[child][MyCartesianControllerState] = s
 
         # Register data
-        self.algo["data"].extend([wrench])
+        self.algo["data"].extend([velocity_root, wrench_root])
 
     def compute_edge(self, state, parent, child):
+        pos = state[parent][PositionAccumulationState]
         vel = state[parent][VelocityPropagationState]
         ctrl = state[child][MyCartesianControllerState]
 
+        rot_vel = self.geom_coord.rotate_velocity_twist_to_proximal_with_pose(
+            pose=pos.x_tot,
+            frm=vel.xd_tot,
+            to=ctrl.velocity_root)
         damp = self.my_damper(
-            velocity_twist=vel.xd_tot,
-            wrench=ctrl.wrench)
+            velocity_twist=ctrl.velocity_root,
+            wrench=ctrl.wrench_root)
+        rot_wrench = self.dyn_coord.rotate_wrench_to_distal_with_pose(
+            pose=pos.x_tot,
+            frm=ctrl.wrench_root,
+            to=ctrl.wrench,
+            number_of_wrenches=1,
+            at_index=0)
 
-        self.algo["func"].extend([damp])
+        self.algo["func"].extend([rot_vel, damp, rot_wrench])
 
     def my_damper(self, velocity_twist, wrench):
         id_ = uuid_ref()

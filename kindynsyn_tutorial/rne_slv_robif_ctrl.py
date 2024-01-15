@@ -75,7 +75,7 @@ def solver_configurator(g, cache, ROB, slv_algo):
 
     # Instantiate Cartesian controller extension
     g.add((ROB["my-ctrl"], EX_CTRL["attached-to"], ROB["link7-root"]))
-    my_ctrl = MyCartesianControllerStep(g, slv_algo, dyn)
+    my_ctrl = MyCartesianControllerStep(g, slv_algo, geom, geom_coord, dyn, dyn_coord)
 
     # Configure solver
     out_1 = SweepConfig(
