@@ -229,10 +229,11 @@ class DynamicsEntitiesWithCoordinates:
         self.ent = ent
         self.coord = coord
 
-    def wrench(self, acts_on, as_seen_by, number_of_wrenches):
+    def wrench(self, acts_on, as_seen_by, number_of_wrenches, reference_point=None):
         assert GEOM_ENT["Frame"] in self.ent.g[as_seen_by : RDF["type"]]
 
-        reference_point = self.ent.g.value(as_seen_by, GEOM_ENT["origin"])
+        if not reference_point:
+            reference_point = self.ent.g.value(as_seen_by, GEOM_ENT["origin"])
         of_wrench = self.ent.wrench(acts_on, reference_point)
         return self.coord.wrench(of_wrench, as_seen_by, number_of_wrenches)
 

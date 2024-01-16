@@ -206,10 +206,11 @@ class SpatialRelationsWithCoordinates:
         of_pose = self.rel.pose(of, with_respect_to)
         return self.coord.pose(of_pose, with_respect_to, orientation, position)
 
-    def velocity_twist(self, of, with_respect_to, as_seen_by, angular_velocity=None, linear_velocity=None):
+    def velocity_twist(self, of, with_respect_to, as_seen_by, reference_point=None, angular_velocity=None, linear_velocity=None):
         assert GEOM_ENT["Frame"] in self.rel.g[as_seen_by : RDF["type"]]
 
-        reference_point = self.rel.g.value(as_seen_by, GEOM_ENT["origin"])
+        if not reference_point:
+            reference_point = self.rel.g.value(as_seen_by, GEOM_ENT["origin"])
         of_velocity = self.rel.velocity(of, with_respect_to, reference_point)
         return self.coord.velocity_twist(of_velocity, as_seen_by, angular_velocity, linear_velocity)
 
