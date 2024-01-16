@@ -116,6 +116,8 @@ class DynamicsEntitiesCoordinates:
         return id_
 
     def transform_wrench_to_proximal(self, pose, frm, to, number_of_wrenches, at_index):
+        assert self.g.value(pose, GEOM_COORD["of-pose"] / GEOM_REL["of"] / GEOM_ENT["origin"]) == self.g.value(frm, RBDYN_COORD["of-wrench"] / RBDYN_ENT["reference-point"])
+        assert self.g.value(pose, GEOM_COORD["of-pose"] / GEOM_REL["with-respect-to"] / GEOM_ENT["origin"]) == self.g.value(to, RBDYN_COORD["of-wrench"] / RBDYN_ENT["reference-point"])
         assert self.g.value(pose, GEOM_COORD["of-pose"] / GEOM_REL["of"]) == self.g.value(frm, RBDYN_COORD["as-seen-by"])
         assert self.g.value(pose, GEOM_COORD["of-pose"] / GEOM_REL["with-respect-to"]) == self.g.value(to, RBDYN_COORD["as-seen-by"])
         assert number_of_wrenches <= self.g.value(frm, RBDYN_COORD["number-of-wrenches"])
