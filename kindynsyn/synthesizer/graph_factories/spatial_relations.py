@@ -72,11 +72,6 @@ class SpatialRelationsCoordinates:
                 collection.Collection(self.g, dc, l)
                 self.g.add((id_, GEOM_COORD[name], dc))
 
-            dc_y = BNode()
-            l = [Literal(a) for a in orientation[1]]
-            collection.Collection(self.g, dc_y, l)
-            self.g.add((id_, GEOM_COORD["direction-cosine-y"], dc_y))
-
         if position:
             self.g.add((id_, GEOM_COORD["x"], Literal(position[0])))
             self.g.add((id_, GEOM_COORD["y"], Literal(position[1])))
