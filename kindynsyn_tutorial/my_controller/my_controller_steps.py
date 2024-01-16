@@ -5,7 +5,7 @@ from kindynsyn.rdflib_tools import uuid_ref
 from kindynsyn.synthesizer import Traverser, Dispatcher
 from kindynsyn.synthesizer.steps import ChainIndexState, \
     PositionAccumulationState, VelocityPropagationState
-from kindynsyn.namespaces import SPEC
+from kindynsyn.namespaces import GEOM_ENT, SPEC
 from .namespace import EX_CTRL
 
 
@@ -45,10 +45,17 @@ class MyCartesianControllerStep:
     def configure_edge(self, state, parent, child):
         par = state[parent][ChainIndexState]
 
+        # Get hold of the frame's origin that will be the damping's reference
+        # point and, hence, also the associated velocity's and wrench's
+        # reference point
+        frm_prox_org = self.g.value(par.frm_prox, GEOM_ENT["origin"])
+
         # Declare required data
         velocity_root = self.geom.velocity_twist(of=par.bdy,
-            with_respect_to=par.bdy_root, as_seen_by=par.frm_root)
-        wrench_root = self.dyn.wrench(acts_on=par.bdy, as_seen_by=par.frm_root,
+            with_respect_to=par.bdy_root, reference_point=frm_prox_org,
+            as_seen_by=par.frm_root)
+        wrench_root = self.dyn.wrench(acts_on=par.bdy,
+            reference_point=frm_prox_org, as_seen_by=par.frm_root,
             number_of_wrenches=1)
         wrench = self.dyn.wrench(acts_on=par.bdy, as_seen_by=par.frm_prox,
             number_of_wrenches=1)
